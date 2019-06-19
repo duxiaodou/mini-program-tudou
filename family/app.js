@@ -1,18 +1,9 @@
 //app.js
 const api = require('./utils/api.js')
 App({
-  getClientToken: function () { // 获取客户端访问令牌
-    const params = {
-      grant_type: 'client_credentials',
-      client_id: 1,
-      client_secret: 'zw9mRPRvTbyQk2kOkkrV63PxB7CciIvfXEk7LwxK'
-    }
-    api.postData('oauth/token', params).then(res => {
-      console.log(res);
-    })
-  },
   onLaunch: function () {
-    this.getClientToken(); 
+    const _this = this;
+    api.getClientToken();
     // 展示本地存储能力
     var logs = wx.getStorageSync('logs') || []
     logs.unshift(Date.now())
@@ -22,6 +13,7 @@ App({
     wx.login({
       success: res => {
         console.log(res);
+        api.getUserToken(res.code);
         // 发送 res.code 到后台换取 openId, sessionKey, unionId
       }
     })
